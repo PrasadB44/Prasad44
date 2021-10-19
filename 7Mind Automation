@@ -1,0 +1,48 @@
+Automating 7Mind Android App on Android Device:-
+package Android;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.By;
+import io.appium.java_client.android.AndroidDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities; //Used to set device properties:device name, platform, version, app package name, activity name etc.
+import org.testng.annotations.AfterTest; 
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+
+public class DemoApp
+{
+	AndroidDriver driver;
+	
+public void SplashScreen() throws MalformedURLException, InterruptedException 
+{
+	DesiredCapabilities capabilities = new DesiredCapabilities();
+	capabilities.setCapability("deviceName", "XW222APNB");                              //obtained from the command "adb devices"
+	capabilities.setCapability(CapabilityType.VERSION, "8.0");                        // Platform Version of Android
+	capabilities.setCapability("platformName", "Android");                           // Name of Platform ,  which is Android
+	capabilities.setCapability("appPackage", "<com.7Mind.AppPackage>");              // 7 mind App Package Name
+	capabilities.setCapability("appActivity", "<com.7Mind.AppActivity>");            // 7 mind app activity Name
+        capabilities.setCapability("browserName", "Android");
+        capabilities.setCapability("unicodeKeyboard", "true");                                     
+        capabilities.setCapability("resetKeyboard", "true");
+	driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+	driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+}
+
+public void Login()
+{
+        driver.findElement(By.name("LOG_IN")).click();                                            //Finds Login button and CLicks  the button
+	driver.findElement(By.name("EMAIL")).click();                                             //Finds Email button and CLicks  the button
+	driver.findElement(By.name("email_address")).sendKeys("prasadbotre44@gmail.com");          //It will Enter's mentioned email id.
+        ((AndroidDriver)driver).pressKeyCode(AndroidKeyCode.ENTER);                                // As there is No "Enter" / "Submit" button in 7Mind App on this screen
+	driver.findElement(By.className("android.widget.EditText")).sendKeys("123456");            //Enter password in next screen
+	((AndroidDriver)driver).pressKeyCode(AndroidKeyCode.ENTER);      // As there is No "Enter" / "Submit" button in 7Mind App on this screen
+        
+}
+	public void end()
+	{
+		driver.quit(); //Closes 7Mind application
+	}
+}
